@@ -22,6 +22,12 @@ Actor::Actor(float x, float y, const char* name = "Actor")
     m_name = name;
 }
 
+/// <summary>
+/// </summary>
+/// <returns>If the actors start function has been called.</returns>
+
+inline bool Actor::getStarted() { return m_started; }
+
 void Actor::start()
 {
     m_started = true;

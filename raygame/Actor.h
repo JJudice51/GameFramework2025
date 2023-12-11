@@ -16,7 +16,7 @@ public:
     /// <summary>
     /// </summary>
     /// <returns>If the actors start function has been called.</returns>
-    bool getStarted() { return m_started; }
+    bool getStarted();
 
     /// <returns> The transform attached to this actor.</returns>
     Transform2D* getTransform() { return m_transform; }
