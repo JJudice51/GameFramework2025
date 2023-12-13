@@ -3,6 +3,7 @@
 void ActorArray::addActor(Actor* actor)
 {
     //Create a new array with a size one greater than our old array
+
     Actor** temp = new Actor * [m_actorCount + 1];
     
     //Copy the values from the old array to the new array
@@ -12,7 +13,7 @@ void ActorArray::addActor(Actor* actor)
     }
 
     //Set the last value in the new array to be the actor we want to add
-    temp[m_actorCount];
+    temp[m_actorCount] = actor;
     //Set old array to hold the values of the new array
     m_actors = temp;
     //Increase the actor count by one
@@ -111,8 +112,10 @@ Actor* ActorArray::getActor(int index)
     if (index < 0 || index >= m_actorCount)
         return nullptr;
 
+    Actor* test = m_actors[index];
+
     //Return the actor at the given index
-    m_actors[index];
+   return m_actors[index];
 }
 
 bool ActorArray::contains(Actor* actor)

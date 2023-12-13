@@ -23,28 +23,38 @@ Actor::Actor(float x, float y, const char* name = "Actor")
     m_name = name;
 }
 
-/// <summary>
-/// </summary>
-/// <returns>If the actors start function has been called.</returns>
-
-inline bool Actor::getStarted() { return m_started; }
-
 void Actor::start()
 {
     m_started = true;
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->start();
+    }
 }
 
 void Actor::onCollision(Actor* other)
 {
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->onCollision(other);
+    }
 }
 
+/// <summary>
+/// pass a name of the component you want then if you find that name it returns said component to you
+/// </summary>
+/// <param name="componentName"></param>
+/// <returns></returns>
 Component* Actor::getComponent(const char* componentName)
 {
+    if (!componentName)
+        return nullptr;
 
-    componentName;
-
-
-
+    for (int i =0; i < m_componentCount; i++)
+    {
+        if (m_components[i]->getName() == componentName)
+            return m_components[i];
+    }
     return nullptr;
 }
 
@@ -74,7 +84,7 @@ Component* Actor::addComponent(Component* component)
 
     temp[m_componentCount] = component;
 
-    m_components= temp;
+    m_components = temp;
 
     m_componentCount++;
 
@@ -126,15 +136,27 @@ bool Actor::removeComponent(const char* componentName)
 void Actor::update(float deltaTime)
 {
     m_transform->updateTransforms();
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->update(deltaTime);
+    }
 }
 
 void Actor::draw()
 {
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->draw();
+    }
 }
 
 void Actor::end()
 {
     m_started = false;
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->end();
+    }
 }
 
 void Actor::onDestroy()
@@ -142,6 +164,11 @@ void Actor::onDestroy()
     //Removes this actor from its parent if it has one
     if (getTransform()->getParent())
         getTransform()->getParent()->removeChild(getTransform());
+
+    for (int i = 0; i < m_componentCount; i++)
+    {
+        m_components[i]->onDestroy();
+    }
 }
 
 bool Actor::checkForCollision(Actor* other)
